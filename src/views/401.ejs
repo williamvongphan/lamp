@@ -1,0 +1,22 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+      title: "401 - Unauthorized",
+      description: "You are not authorized to view this page."
+    }
+}) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto h-screen flex flex-col items-center justify-center">
+    <div class="p-6 rounded-lg shadow-md bg-white">
+        <h1 class="text-4xl font-medium mb-4">401 Unauthorized</h1>
+        <p class="mb-4">
+            The requested URL <code class="bg-gray-200 p-1 rounded-lg"><%= url %></code> requires authentication.
+        </p>
+        <a href="javascript:history.back()" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Back</a>
+    </div>
+        </div>
+</div>
+</body>
+</html>

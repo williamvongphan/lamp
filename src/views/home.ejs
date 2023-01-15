@@ -1,0 +1,33 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+title: "Home",
+description: "Homepage of LAMP."
+}
+}) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto h-screen flex flex-col items-center justify-center">
+        <div class="p-6 rounded-lg shadow-md bg-white">
+        <h1 class="text-4xl font-medium mb-4">LAMP</h1>
+        <p class="text-xl font-medium mb-4">Linear Algebra Multiplayer Projection</p>
+        <div class="flex flex-col items-center justify-center">
+            <a href="/register" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mb-4">
+                Register
+            </a>
+            <a href="/login" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mb-4">
+                Login
+            </a>
+            <a href="/play" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mb-4">
+                Play
+            </a>
+            <a href="/leaderboard" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mb-4">
+                Leaderboard
+            </a>
+        </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
