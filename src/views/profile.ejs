@@ -62,7 +62,7 @@ description: "Profile and information about this user",
 	}
 
 	let user = "<%= username %>"
-	let url = "/api/profile?username=" + user
+	let url = "/api/profile?user=" + user
 	fetch(url).then(res => res.json()).then(data => {
 		if (data.status !== 200) {
             // Update error message
