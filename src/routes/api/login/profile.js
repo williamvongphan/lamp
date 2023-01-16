@@ -7,7 +7,7 @@ let route = {
 	"ratelimit": {
 		"active": true,
 		"window": 1000,
-		"max": 1
+		"max": 3
 	},
 	"handler": async function (req, res) {
 		// If there is a specific user in the request, return their profile

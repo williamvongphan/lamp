@@ -7,7 +7,7 @@ let route = {
 	"ratelimit": {
 		"active": true,
 		"window": 1000,
-		"max": 1
+		"max": 3
 	},
 	"handler": function (req, res) {
 		// If user is authenticated, destroy their session and return a status

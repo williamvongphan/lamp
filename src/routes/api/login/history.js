@@ -7,7 +7,7 @@ let route = {
 	"ratelimit": {
 		"active": true,
 		"window": 1000,
-		"max": 1
+		"max": 5
 	},
 	"handler": async function (req, res) {
 		// Get the history item in the request

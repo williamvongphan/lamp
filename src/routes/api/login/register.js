@@ -3,7 +3,7 @@ const utils = require('../../../util/index.js');
 
 let route = {
 	"name": "register", "path": "/register", "method": "post", "ratelimit": {
-		"active": true, "window": 1000, "max": 1
+		"active": true, "window": 1000, "max": 3
 	}, "authentication": {
 		"active": false,
 	}, "handler": async function (req, res) {

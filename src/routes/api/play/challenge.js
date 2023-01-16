@@ -9,7 +9,7 @@ let route = {
 	"ratelimit": {
 		"active": true, 
 		"window": 1000, 
-		"max": 1
+		"max": 10
 	}, 
 	"authentication": {
 		"active": false,
