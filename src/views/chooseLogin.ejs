@@ -1,0 +1,27 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+title: "Register/Login",
+description: "Either register or login to your account to access your profile and other features.",
+}
+}) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto h-screen flex flex-col items-center justify-center">
+        <div class="container mx-auto flex items-center justify-center h-screen">
+            <div class="p-6 rounded-lg shadow-md bg-white">
+                <h1 class="text-4xl font-bold mb-4">Register/Login</h1>
+                <p class="text font-medium mb-4">Either register or login to your account to access your profile and other features.</p>
+                <a href="/register" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 mr-4">
+                    Register
+                </a>
+                <a href="/login" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">
+                    Login
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

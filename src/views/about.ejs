@@ -1,0 +1,24 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+title: "About",
+description: "About this website and its author",
+} }) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto min-h-screen flex flex-col items-center justify-center">
+        <div class="p-6 rounded-lg shadow-md bg-white max-w-4xl mt-6 mb-6">
+            <h1 class="text-4xl font-bold text-gray-800">About LAMP</h1>
+            <p class="text-gray-600">LAMP <span class="italic">(Linear Algebra Multiplayer Projection)</span> is a multiplayer game where you compete with others worldwide to project a vector onto another vector. It was created by <a href="https://hi.williamvongphanith.com" class="text-blue-500 hover:underline">William Vongphanith</a> for Mr. Honner's Linear Algebra final project.</p>
+            <br>
+            <p class="text-gray-600">The game is written in <a href="https://nodejs.org" class="text-blue-500 hover:underline">Node.js</a> and <a href="https://expressjs.com" class="text-blue-500 hover:underline">Express</a> on the backend and <a href="https://ejs.co" class="text-blue-500 hover:underline">EJS</a> on the frontend. The game is hosted on <a href="https://oracle.com" class="text-blue-500 hover:underline">Oracle Cloud</a> and uses <a href="https://www.mongodb.com" class="text-blue-500 hover:underline">MongoDB</a> for data storage.</p>
+            <br>
+            <p class="text-gray-600">The backend linear algebra library and the frontend graphing UI canvas library were both written from scratch by me. While it isn't used, I wrote a matrix class for the backend as well. You're free to use any of the code in this project for your own projects, but please give credit where credit is due.</p>
+            <br>
+            <p class="text-gray-600">The game is open source and can be found on <a href="https://github.com/williamvongphan/lamp" class="text-blue-500 hover:underline">GitHub</a>.</p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,22 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+title: "Game not found",
+description: "This game doesn't exist, may have been deleted, or is private.",
+}
+}) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto flex flex-col items-center justify-center">
+        <div class="container mx-auto flex items-center justify-center max-w-4xl mt-6 mb-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h1 class="text-3xl font-bold">Game not found</h1>
+                <p class="text-gray-600 mb-4">The requested history entry, <span class="font-bold"><%= history %></span>, doesn't exist, may have been deleted, or is private.</p>
+                <a href="javascript:history.back()" class="bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

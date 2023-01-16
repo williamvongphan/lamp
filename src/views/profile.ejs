@@ -1,0 +1,104 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+title: "Profile",
+description: "Profile and information about this user",
+}
+}) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto flex flex-col items-center justify-center">
+        <div class="container mx-auto flex items-center justify-center max-w-4xl mt-6 mb-6">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h1 class="text-3xl font-bold">Profile for <%= username %></h1>
+                <p class="text-red-500 text-sm mb-4" id="error"></p>
+                <p class="text-gray-600 text-lg" id="bio"></p>
+                <p class="" id="avg-score"></p>
+                <p class="" id="projections"></p>
+                <p class="" id="last-game"></p>
+                <!-- Div that contains links to player's games -->
+                <div class="mt-6">
+                    <h2 class="text-2xl font-bold mb-4">Recent projections</h2>
+                    <div id="history"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submit to /api/login, do not change pages (until we receive a response) -->
+<script>
+	let ms = (options) => {
+		// Convert milliseconds to a human-readable string
+		let ms = options.ms
+		let seconds = Math.floor(ms / 1000)
+		let minutes = Math.floor(seconds / 60)
+		let hours = Math.floor(minutes / 60)
+		let days = Math.floor(hours / 24)
+		let years = Math.floor(days / 365)
+		let months = Math.floor(days / 30)
+		let weeks = Math.floor(days / 7)
+		let output = ""
+		// Get the largest unit of time
+		if (years > 0) {
+			output += `${years} year${years == 1 ? "" : "s"}`
+		} else if (months > 0) {
+			output += `${months} month${months == 1 ? "" : "s"}`
+		} else if (weeks > 0) {
+			output += `${weeks} week${weeks == 1 ? "" : "s"}`
+		} else if (days > 0) {
+			output += `${days} day${days == 1 ? "" : "s"}`
+		} else if (hours > 0) {
+			output += `${hours} hour${hours == 1 ? "" : "s"}`
+		} else if (minutes > 0) {
+			output += `${minutes} minute${minutes == 1 ? "" : "s"}`
+		} else if (seconds > 0) {
+			output += `${seconds} second${seconds == 1 ? "" : "s"}`
+		} else {
+			output += `${ms} millisecond${ms == 1 ? "" : "s"}`
+		}
+		return output
+	}
+
+	let user = "<%= username %>"
+	let url = "/api/profile?username=" + user
+	fetch(url).then(res => res.json()).then(data => {
+		if (data.status !== 200) {
+            // Update error message
+            document.getElementById("error").innerText = data.message
+		} else {
+			// Update the bio
+			document.getElementById("bio").innerHTML = data.bio || "This person doesn't have a bio, but we can assume they're pretty cool and know how to project vectors."
+			// Update the average score
+			document.getElementById("avg-score").innerHTML = "<span class='font-bold'>Average score</span> " + Math.round(data.average * 100) / 100 + " points"
+			// Update the projections
+			document.getElementById("projections").innerHTML = "<span class='font-bold'>Projections</span> " + data.total
+			// Update the last game
+			document.getElementById("last-game").innerHTML = "<span class='font-bold'>Last game</span> " + ms({ms: Date.now() - data.lastTimestamp}) + " ago"
+			// Update the games
+			let hist = document.getElementById("history")
+			data.history.forEach(history => {
+				// Create a card that links to the history
+				let card = document.createElement("a")
+				card.href = "/history/" + history._id
+				card.classList.add("bg-gray-100", "p-4", "rounded-lg", "shadow-md", "mb-4", "block")
+				// Create the title
+				let title = document.createElement("h3")
+				title.classList.add("text-xl", "font-bold")
+				title.innerHTML = ms({ms: Date.now() - history.timestamp}) + " ago"
+				// Create the description
+				let description = document.createElement("p")
+				description.classList.add("text-gray-600")
+				description.innerHTML = Math.round(history.score * 100) / 100 + " points"
+				// Append the title and description to the card
+				card.appendChild(title)
+				card.appendChild(description)
+				// Append the card to the games div
+				hist.appendChild(card)
+			});
+		}
+	})
+</script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+title: "Login",
+description: "Login to your account",
+}
+}) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto h-screen flex flex-col items-center justify-center">
+        <div class="container mx-auto flex items-center justify-center h-screen">
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <form class="p-6" id="bio-form">
+                    <p class="text-3xl font-bold mb-4">Settings</p>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="username">
+                            Bio
+                        </label>
+                        <input
+                                id="bio"
+                                type="textarea"
+                                class="w-full border border-gray-400 p-2 rounded-lg hover:border-sky-blue focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="I am a..."
+                        >
+                    </div>
+                    <p class="text-red-500 text-sm mb-4" id="error-bio"></p>
+                    <button
+                            type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    >
+                        Change Bio
+                    </button>
+                </form>
+
+                <form id="password-form" class="p-6">
+                    <p class="text-3xl font-bold mb-4">Change password</p>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="username">
+                            Current password
+                        </label>
+                        <input
+                                id="current-password"
+                                type="password"
+                                class="w-full border border-gray-400 p-2 rounded-lg hover:border-sky-blue focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="********"
+                        >
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="username">
+                            New password
+                        </label>
+                        <input
+                                id="new-password"
+                                type="password"
+                                class="w-full border border-gray-400 p-2 rounded-lg hover:border-sky-blue focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="********"
+                        >
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="username">
+                            Confirm new password
+                        </label>
+                        <input
+                                id="confirm-new-password"
+                                type="password"
+                                class="w-full border border-gray-400 p-2 rounded-lg hover:border-sky-blue focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="********"
+                        >
+                    </div>
+                    <p class="text-red-500 text-sm mb-4" id="error-passwords"></p>
+                    <button
+                            type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    >
+                        Change password
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submit to /api/login, do not change pages (until we receive a response) -->
+<script>
+	// On password change or password confirmation change, check if they match
+	document.getElementById("new-password").addEventListener("change", function (e) {
+		let password = document.getElementById("new-password").value;
+		let password_confirmation = document.getElementById("confirm-new-password").value;
+		if (password !== password_confirmation) {
+			document.getElementById("error-passwords").innerHTML = "Passwords do not match";
+		} else {
+			document.getElementById("error-passwords").innerHTML = "";
+		}
+	});
+	document.getElementById("confirm-new-password").addEventListener("change", function (e) {
+		let password = document.getElementById("new-password").value;
+		let password_confirmation = document.getElementById("confirm-new-password").value;
+		if (password !== password_confirmation) {
+			document.getElementById("error-passwords").innerHTML = "Passwords do not match";
+		} else {
+			document.getElementById("error-passwords").innerHTML = "";
+		}
+	});
+
+	// On submit, send a request to the API (different endpoints for bio and password)
+	document.getElementById("bio-form").addEventListener("submit", function (e) {
+		e.preventDefault();
+		let bio = document.getElementById("bio").value;
+		fetch("/api/settings/bio", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				bio: bio,
+			}),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.error) {
+					document.getElementById("error-bio").innerHTML = data.error;
+				} else {
+					window.location.href = "/profile";
+				}
+			});
+	});
+	
+	document.getElementById("password-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        let currentPassword = document.getElementById("current-password").value;
+        let newPassword = document.getElementById("new-password").value;
+        let confirmNewPassword = document.getElementById("confirm-new-password").value;
+        if (newPassword !== confirmNewPassword) {
+          document.getElementById("error-passwords").innerHTML = "Passwords do not match";
+        }
+        fetch("/api/settings/password", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                oldPassword: currentPassword,
+                newPassword: newPassword,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.error) {
+                    document.getElementById("error-passwords").innerHTML = data.error;
+                } else {
+                    window.location.href = "/profile";
+                }
+            });
+    });
+</script>
+</body>
+</html>

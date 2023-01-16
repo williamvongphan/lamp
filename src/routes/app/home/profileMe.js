@@ -1,16 +1,14 @@
 let route = {
-	"name": "home",
-	"path": "/",
+	"name": "profile",
+	"path": "/profile",
 	"method": "get",
 	"handler": function (req, res) {
 		if (req.isAuthenticated()) {
-			res.render('home', {
-				"loggedIn": true
+			res.render('profile', {
+				"username": req.user.username
 			});
 		} else {
-			res.render('home', {
-				"loggedIn": false
-			});
+			res.redirect('/choose');
 		}
 	}
 }

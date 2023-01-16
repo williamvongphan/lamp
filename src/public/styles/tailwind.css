@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+    --font-serif: 'lust', "Georgia", "Cambria", "Times New Roman", "Times", serif;
+    --font-sans: 'basic-sans', "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+    --font-mono: 'ballinger-mono', "SFMono-Regular", "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+
+    font-family: var(--font-sans);
+}
+
+html * {
+    transition: all 0.2s ease-in-out !important;
+}
