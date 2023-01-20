@@ -50,10 +50,20 @@ let route = {
 				}
 				average = average / total;
 
-				// Get last 10 history items for this user
-				let last10 = await HistorySchema.find({
+				// Get last 5 history items for this user
+				let last5 = await HistorySchema.find({
 					"user": user._id
-				}).sort({"timestamp": -1}).limit(10);
+				}).sort({"timestamp": -1}).limit(5);
+
+				// Get best 5 history items for this user
+				let best5 = await HistorySchema.find({
+					"user": user._id
+				}).sort({"score": -1}).limit(5);
+
+				// Get worst 5 history items for this user
+				let worst5 = await HistorySchema.find({
+					"user": user._id
+				}).sort({"score": 1}).limit(5);
 
 				res.status(200).json({
 					"message": "Successfully retrieved user profile.",
@@ -62,7 +72,9 @@ let route = {
 					"bio": user.bio,
 					"average": average,
 					"total": total,
-					"history": last10,
+					"history": last5,
+					"best": best5,
+					"worst": worst5,
 					"lastTimestamp": lastTimestamp
 				});
 			});

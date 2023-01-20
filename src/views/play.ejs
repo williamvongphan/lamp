@@ -9,10 +9,12 @@ description: "Project a vector, earn points, and beat others!"
 <div class="relative z-10">
     <div class="container mx-auto min-h-screen flex flex-col items-center justify-center">
         <div class="p-6 rounded-lg shadow-md bg-white max-w-4xl mt-6 mb-6">
-            <h1 class="text-4xl font-bold mb-4">Play</h1>
+            <h1 class="text-4xl font-bold mb-4">Play <a href="/about#update-jan-19"><span
+                            class="text-gray-500 text-lg hover:underline">LAMP Jan 19 Version</span></a></h1>
             <p class="mb-4">
-                Your goal is to project the red vector onto the blue vector. Drag the green vector's head (arrow) to
-                where you think the projection will be. The closer you are, the more points you get!
+                Your goal is to project the <span class="font-bold text-red-500">red vector</span> onto the <span
+                        class="font-bold text-blue-500">blue vector</span>. Drag the green vector's head (arrow) to
+                where you think the projection will be. If you're on a touch screen device (I do rotating your phone sideways), click on the canvas to place your vector. The closer you are, the more points you get!
             </p>
             <p class="mb-4">
                 A score of >80 is pretty good, a score of >90 is excellent, and a score of >95 means you're probably
@@ -22,11 +24,20 @@ description: "Project a vector, earn points, and beat others!"
                 Once you submit your score, the interface will lock, and you can't change your answer. The correct
                 vector will be displayed in purple, so you can compare your answer to the correct answer.
             </p>
-                <canvas id="main" class="m-auto align-center justify-center" width="500px" height="500px"></canvas>
+            <p>
+                <a class="text-blue-500 hover:underline" href="/png/tutorial.png">This apparently hasn't been clear
+                    enough so here is a tutorial</a>
+            </p>
+            <br>
+            <canvas id="main" class="m-auto align-center justify-center" width="500px" height="500px"></canvas>
             <div class="flex justify-center mt-4">
                 <button id="new-challenge"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
                     New Challenge
+                </button>
+                <button id="mobile-mode"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg ml-4">
+                    I'm using a touch screen
                 </button>
                 <button id="submit"
                         class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg ml-4">
@@ -227,6 +238,11 @@ description: "Project a vector, earn points, and beat others!"
 	// Get the submit button
 	const submitButton = document.getElementById('submit');
 
+	let mobile = false;
+	if (window.innerWidth < 600) {
+		mobile = true;
+	}
+
 
 	// Add event listeners to the buttons
 	newChallengeButton.addEventListener('click', async () => {
@@ -317,6 +333,30 @@ description: "Project a vector, earn points, and beat others!"
 			clearInterval(this.drawLoop);
 		}
 	}
+
+	// When mobile, accept clicks on the canvas to drag the vector
+	canvas.addEventListener('click', (e) => {
+		if (mobile) {
+			console.log('clicked at ' + e.clientX + ', ' + e.clientY);
+			if (currentGame) {
+				currentGame.draggableVector.dragging = true;
+				currentGame.draggableVector.x2 = e.clientX - canvas.offsetLeft;
+				currentGame.draggableVector.y2 = e.clientY - canvas.offsetTop;
+			}
+		}
+	})
+
+
+	// Add mobile event listeners (toggle mobile variable)
+	let mobileButton = document.getElementById('mobile-mode');
+	mobileButton.addEventListener('click', () => {
+		mobile = !mobile;
+		if (mobile) {
+			mobileButton.innerHTML = "I'm using a mouse/trackpad";
+		} else {
+			mobileButton.innerHTML = "I'm using a touch screen";
+		}
+	});
 
 	// Submit the answer
 	submitButton.addEventListener('click', async () => {

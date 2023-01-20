@@ -2,7 +2,7 @@
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
 const random = require('./random.js');
-const saltRounds = 10;
+const saltRounds = 16;
 
 module.exports = {
 	salt: function () {
@@ -16,6 +16,7 @@ module.exports = {
 		return { hash: hash, salt: salt };
 	},
 	compare: function (password, hash) {
+		console.log(password, hash);
 		let res = bcrypt.compareSync(password, hash);
 		console.log(res);
 		return res;

@@ -24,6 +24,19 @@ let route = {
 			let challenge = await ChallengeSchema.findOne({
 				"user": user._id
 			});
+			// Look for a historyschema entry with the same starting vector and projection vector
+			let oldHistory = await HistorySchema.findOne({
+				"startingVector": challenge.startingVector,
+				"projectionVector": challenge.projectionVector,
+			});
+			// If there is an old history entry, return an error stating that the challenge has already been completed
+			if (oldHistory) {
+				res.status(400).json({
+					"message": "Challenge has already been completed, please press new challenge.",
+					"status": 400
+				});
+				return;
+			}
 			// Compare the challenge's solved vector with the submitted vector
 			let {score, scores} = utils.game.score(challenge.solvedVector, req.body.vector);
 			// Update the user's score and scores by creating a history entry

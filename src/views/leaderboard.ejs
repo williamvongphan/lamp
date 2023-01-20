@@ -10,14 +10,37 @@ description: "Check to see whether you're the best at projecting vectors.",
     <div class="container mx-auto min-h-screen flex flex-col items-center justify-center">
         <div class="p-6 rounded-lg shadow-md bg-white max-w-4xl mt-6 mb-6">
             <h1 class="text-4xl font-bold mb-4">Leaderboard</h1>
+            <!-- Three stats on one line: total users, total plays, and average score -->
+            <!-- Put nice spacing between them using tailwind css classes so each takes up 1/3 of the line -->
+            <div class="flex justify-between mb-4">
+                <div class="text-center basis-1/3">
+                    <h2 class="text-2xl font-bold">Total Users</h2>
+                    <p class="text-3xl font-bold" id="total-users">Loading</p>
+                </div>
+                <div class="text-center basis-1/3">
+                    <h2 class="text-2xl font-bold">Total Plays</h2>
+                    <p class="text-3xl font-bold" id="total-plays">Loading</p>
+                </div>
+                <div class="text-center basis-1/3">
+                    <h2 class="text-2xl font-bold">Average Score</h2>
+                    <p class="text-3xl font-bold" id="average-score">Loading</p>
+                </div>
+                </div>
             <!-- Leaderboard for best accuracy -->
             <h2 class="text-2xl font-bold mb-4">Best Accuracy</h2>
-            <p class="mb-4 text-lg">Look at all these people who are better at projecting vectors than you are (or maybe you're better than them, who knows).</p>
+            <p class="mb-4 text-lg">Look at all these people who are better at projecting vectors than you are (or maybe
+                you're better than them, who knows).</p>
             <p class="mb-4" id="leaderboard-accuracy">Loading</p>
+
+            <!-- Leaderboard for worst accuracy -->
+            <h2 class="text-2xl font-bold mb-4">Worst Accuracy</h2>
+            <p class="mb-4 text-lg">How do you score badly on vector projection? Leaderboard courtesy of Mr. Honner</p>
+            <p class="mb-4" id="leaderboard-worst-accuracy">Loading</p>
 
             <!-- Leaderboard for most projections -->
             <h2 class="text-2xl font-bold mb-4">Most Projections</h2>
-            <p class="mb-4 text-lg">You think you've practiced a lot? There's no such thing as too much practice! These people have done the most projections.</p>
+            <p class="mb-4 text-lg">You think you've practiced a lot? There's no such thing as too much practice! These
+                people have done the most projections.</p>
             <p class="mb-4" id="leaderboard-user">Loading</p>
 
             <!-- Leaderboard for most recent projection -->
@@ -29,76 +52,94 @@ description: "Check to see whether you're the best at projecting vectors.",
 </div>
 
 <script>
-	let keycaps = ["🥇","🥈","🥉","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟"]
+	let keycaps = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
 
-    let ms = (options) => {
+	let ms = (options) => {
 		// Convert milliseconds to a human-readable string
-        let ms = options.ms
-        let seconds = Math.floor(ms / 1000)
-        let minutes = Math.floor(seconds / 60)
-        let hours = Math.floor(minutes / 60)
-        let days = Math.floor(hours / 24)
-        let years = Math.floor(days / 365)
-        let months = Math.floor(days / 30)
-        let weeks = Math.floor(days / 7)
-        let output = ""
-        // Get the largest unit of time
-        if (years > 0) {
-            output += `${years} year${years == 1 ? "" : "s"}`
-        } else if (months > 0) {
-            output += `${months} month${months == 1 ? "" : "s"}`
-        } else if (weeks > 0) {
-            output += `${weeks} week${weeks == 1 ? "" : "s"}`
-        } else if (days > 0) {
-            output += `${days} day${days == 1 ? "" : "s"}`
-        } else if (hours > 0) {
-            output += `${hours} hour${hours == 1 ? "" : "s"}`
-        } else if (minutes > 0) {
-            output += `${minutes} minute${minutes == 1 ? "" : "s"}`
-        } else if (seconds > 0) {
-            output += `${seconds} second${seconds == 1 ? "" : "s"}`
-        } else {
-            output += `${ms} millisecond${ms == 1 ? "" : "s"}`
-        }
-        return output
-    }
+		let ms = options.ms
+		let seconds = Math.floor(ms / 1000)
+		let minutes = Math.floor(seconds / 60)
+		let hours = Math.floor(minutes / 60)
+		let days = Math.floor(hours / 24)
+		let years = Math.floor(days / 365)
+		let months = Math.floor(days / 30)
+		let weeks = Math.floor(days / 7)
+		let output = ""
+		// Get the largest unit of time
+		if (years > 0) {
+			output += `${years} year${years == 1 ? "" : "s"}`
+		} else if (months > 0) {
+			output += `${months} month${months == 1 ? "" : "s"}`
+		} else if (weeks > 0) {
+			output += `${weeks} week${weeks == 1 ? "" : "s"}`
+		} else if (days > 0) {
+			output += `${days} day${days == 1 ? "" : "s"}`
+		} else if (hours > 0) {
+			output += `${hours} hour${hours == 1 ? "" : "s"}`
+		} else if (minutes > 0) {
+			output += `${minutes} minute${minutes == 1 ? "" : "s"}`
+		} else if (seconds > 0) {
+			output += `${seconds} second${seconds == 1 ? "" : "s"}`
+		} else {
+			output += `${ms} millisecond${ms == 1 ? "" : "s"}`
+		}
+		return output
+	}
 
-    let linkify = (user) => {
+	let linkify = (user) => {
 		// Convert a user object to a link
-        return `<a class="text-blue-500 hover:underline" href="/profile/${user.user}"><span class="text-blue-500 hover:underline">${user.user}</span></a>`
-    }
+		return `<a class="text-blue-500 hover:underline" href="/profile/${user.user}"><span class="text-blue-500 hover:underline">${user.user}</span></a>`
+	}
 
-    // Fetch the API for leaderboard
-    fetch("/api/leaderboard")
-        .then(res => res.json())
-        .then(data => {
-            // Accuracy leaderboard
-            let accuracy = data.score
-            let accuracyHTML = ""
-            for (let i = 0; i < accuracy.length; i++) {
-                let user = accuracy[i];
-                accuracyHTML += `<p class="mb-2"><span class="font-bold">${keycaps[i]} ${linkify(user)}</span> ${Math.round(user.score * 100) / 100} points</p>`
-            }
-            document.getElementById("leaderboard-accuracy").innerHTML = accuracyHTML
+	// Fetch the API for leaderboard
+	fetch("/api/leaderboard")
+		.then(res => res.json())
+		.then(data => {
+			// Accuracy leaderboard
+			let accuracy = data.score
+			let accuracyHTML = ""
+			for (let i = 0; i < accuracy.length; i++) {
+				let user = accuracy[i];
+				accuracyHTML += `<p class="mb-2"><span class="font-bold">${keycaps[i]} ${linkify(user)}</span> ${Math.round(user.score * 100) / 100} points</p>`
+			}
+			document.getElementById("leaderboard-accuracy").innerHTML = accuracyHTML
 
-            // User leaderboard
-            let users = data.users;
-            let userHTML = ""
-            for (let i = 0; i < users.length; i++) {
-                let user = users[i];
-                userHTML += `<p class="mb-2"><span class="font-bold">${keycaps[i]} ${linkify(user)}</span> ${user.count} projections</p>`
-            }
-            document.getElementById("leaderboard-user").innerHTML = userHTML
+			// Worst accuracy leaderboard
+			let worstAccuracy = data.worst
+			let worstAccuracyHTML = ""
+			for (let i = 0; i < worstAccuracy.length; i++) {
+				let user = worstAccuracy[i];
+				worstAccuracyHTML += `<p class="mb-2"><span class="font-bold">${keycaps[i]} ${linkify(user)}</span> ${Math.round(user.score * 100) / 100} points</p>`
+			}
+			document.getElementById("leaderboard-worst-accuracy").innerHTML = worstAccuracyHTML
 
-            // Recent leaderboard
-            let recent = data.time
-            let recentHTML = ""
-            for (let i = 0; i < recent.length; i++) {
-                let user = recent[i]
-                recentHTML += `<p class="mb-2"><span class="font-bold">${keycaps[i]} ${linkify(user)}</span> ${ms({ms: Date.now() - user.timestamp})} ago</p>`
-            }
-            document.getElementById("leaderboard-recent").innerHTML = recentHTML
-        })
+			// User leaderboard
+			let users = data.users;
+			let userHTML = ""
+			for (let i = 0; i < users.length; i++) {
+				let user = users[i];
+				userHTML += `<p class="mb-2"><span class="font-bold">${keycaps[i]} ${linkify(user)}</span> ${user.count} projections</p>`
+			}
+			document.getElementById("leaderboard-user").innerHTML = userHTML
+
+			// Recent leaderboard
+			let recent = data.time
+			let recentHTML = ""
+			for (let i = 0; i < recent.length; i++) {
+				let user = recent[i]
+				recentHTML += `<p class="mb-2"><span class="font-bold">${keycaps[i]} ${linkify(user)}</span> ${ms({ms: Date.now() - user.timestamp})} ago</p>`
+			}
+			document.getElementById("leaderboard-recent").innerHTML = recentHTML
+
+			// General game data
+			let gameData = data.data;
+			let totalUsers = gameData.users;
+			let totalProjections = gameData.plays;
+			let totalPoints = gameData.score;
+			document.getElementById("total-users").innerHTML = totalUsers;
+			document.getElementById("total-plays").innerHTML = totalProjections;
+			document.getElementById("average-score").innerHTML = Math.round(totalPoints * 100) / 100;
+		})
 </script>
 </body>
 </html>

@@ -15,6 +15,11 @@ module.exports = {
 		end.set(1, Math.random() * 20 - 10);
 		// Solve for projection vector
 		let projection = start.project(end);
+		// Check if any of the vector projection's dimensions go over or below 10 (the max)
+		// If so, generate a new challenge
+		if (projection.get(0) > 10 || projection.get(0) < -10 || projection.get(1) > 10 || projection.get(1) < -10) {
+			return this.generateChallenge();
+		}
 		return {
 			startingVector: start.toJSON(),
 			projectionVector: end.toJSON(),

@@ -17,10 +17,20 @@ description: "Profile and information about this user",
                 <p class="" id="avg-score"></p>
                 <p class="" id="projections"></p>
                 <p class="" id="last-game"></p>
-                <!-- Div that contains links to player's games -->
+                <!-- Div that contains links to player's best games -->
+                <div class="mt-6">
+                    <h2 class="text-2xl font-bold mb-4">Best projections</h2>
+                    <div id="history-best"></div>
+                </div>
+                <!-- Div that contains links to player's worst games -->
+                <div class="mt-6">
+                    <h2 class="text-2xl font-bold mb-4">Worst projections</h2>
+                    <div id="history-worst"></div>
+                </div>
+                <!-- Div that contains links to player's recent games -->
                 <div class="mt-6">
                     <h2 class="text-2xl font-bold mb-4">Recent projections</h2>
-                    <div id="history"></div>
+                    <div id="history-recent"></div>
                 </div>
             </div>
         </div>
@@ -29,6 +39,8 @@ description: "Profile and information about this user",
 
 <!-- Submit to /api/login, do not change pages (until we receive a response) -->
 <script>
+
+	let keycaps = ["🥇", "🥈", "🥉", "4️⃣", "5️⃣", "6️⃣", "7️⃣", "8️⃣", "9️⃣", "🔟"];
 	let ms = (options) => {
 		// Convert milliseconds to a human-readable string
 		let ms = options.ms
@@ -65,8 +77,8 @@ description: "Profile and information about this user",
 	let url = "/api/profile?user=" + user
 	fetch(url).then(res => res.json()).then(data => {
 		if (data.status !== 200) {
-            // Update error message
-            document.getElementById("error").innerText = data.message
+			// Update error message
+			document.getElementById("error").innerText = data.message
 		} else {
 			// Update the bio
 			document.getElementById("bio").innerHTML = data.bio || "This person doesn't have a bio, but we can assume they're pretty cool and know how to project vectors."
@@ -77,8 +89,8 @@ description: "Profile and information about this user",
 			// Update the last game
 			document.getElementById("last-game").innerHTML = "<span class='font-bold'>Last game</span> " + ms({ms: Date.now() - data.lastTimestamp}) + " ago"
 			// Update the games
-			let hist = document.getElementById("history")
-			data.history.forEach(history => {
+			let historyRecent = document.getElementById("history-recent")
+			data.history.forEach((history, n) => {
 				// Create a card that links to the history
 				let card = document.createElement("a")
 				card.href = "/history/" + history._id
@@ -86,7 +98,7 @@ description: "Profile and information about this user",
 				// Create the title
 				let title = document.createElement("h3")
 				title.classList.add("text-xl", "font-bold")
-				title.innerHTML = ms({ms: Date.now() - history.timestamp}) + " ago"
+				title.innerHTML = keycaps[n] + " " + ms({ms: Date.now() - history.timestamp}) + " ago"
 				// Create the description
 				let description = document.createElement("p")
 				description.classList.add("text-gray-600")
@@ -95,7 +107,53 @@ description: "Profile and information about this user",
 				card.appendChild(title)
 				card.appendChild(description)
 				// Append the card to the games div
-				hist.appendChild(card)
+				historyRecent.appendChild(card)
+			});
+
+			// Update the games
+			let historyBest = document.getElementById("history-best")
+			data.best.forEach((history, n) => {
+				// Create a card that links to the history
+				let card = document.createElement("a")
+				card.href = "/history/" + history._id
+
+				card.classList.add("bg-gray-100", "p-4", "rounded-lg", "shadow-md", "mb-4", "block")
+				// Create the title
+				let title = document.createElement("h3")
+				title.classList.add("text-xl", "font-bold")
+				title.innerHTML = keycaps[n] + " " + Math.round(history.score * 100) / 100 + " points"
+				// Create the description
+				let description = document.createElement("p")
+				description.classList.add("text-gray-600")
+				description.innerHTML = ms({ms: Date.now() - history.timestamp}) + " ago"
+				// Append the title and description to the card
+				card.appendChild(title)
+				card.appendChild(description)
+				// Append the card to the games div
+				historyBest.appendChild(card)
+			});
+
+			// Update the games
+			let historyWorst = document.getElementById("history-worst")
+			data.worst.forEach((history, n) => {
+				// Create a card that links to the history
+				let card = document.createElement("a")
+				card.href = "/history/" + history._id
+
+				card.classList.add("bg-gray-100", "p-4", "rounded-lg", "shadow-md", "mb-4", "block")
+				// Create the title
+				let title = document.createElement("h3")
+				title.classList.add("text-xl", "font-bold")
+				title.innerHTML = keycaps[n] + " " + Math.round(history.score * 100) / 100 + " points"
+				// Create the description
+				let description = document.createElement("p")
+				description.classList.add("text-gray-600")
+				description.innerHTML = ms({ms: Date.now() - history.timestamp}) + " ago"
+				// Append the title and description to the card
+				card.appendChild(title)
+				card.appendChild(description)
+				// Append the card to the games div
+				historyWorst.appendChild(card)
 			});
 		}
 	})
