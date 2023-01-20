@@ -337,11 +337,16 @@ description: "Project a vector, earn points, and beat others!"
 	// When mobile, accept clicks on the canvas to drag the vector
 	canvas.addEventListener('click', (e) => {
 		if (mobile) {
-			console.log('clicked at ' + e.clientX + ', ' + e.clientY);
+			// Get current position of canvas on screen (not page)
+            const rect = canvas.getBoundingClientRect();
+            // Get the x and y coordinates of the click relative to the canvas
+            const x = e.clientX - rect.left;
+						            const y = e.clientY - rect.top;
+												console.log("mobile click at " + x + ", " + y);
 			if (currentGame) {
 				currentGame.draggableVector.dragging = true;
-				currentGame.draggableVector.x2 = e.clientX - canvas.offsetLeft;
-				currentGame.draggableVector.y2 = e.clientY - canvas.offsetTop;
+				currentGame.draggableVector.x2 = x;
+				currentGame.draggableVector.y2 = y;
 			}
 		}
 	})
