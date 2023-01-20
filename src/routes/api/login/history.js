@@ -44,6 +44,7 @@ let route = {
 			"submittedVector": history.submittedVector,
 			"startingVector": history.startingVector,
 			"projectionVector": history.projectionVector,
+			"user": user.username,
 			"timestamp": Date.now()
 		});
 	}

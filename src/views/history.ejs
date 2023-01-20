@@ -10,6 +10,7 @@ description: "Project a vector, earn points, and beat others!"
     <div class="container mx-auto min-h-screen flex flex-col items-center justify-center">
         <div class="p-6 rounded-lg shadow-md bg-white max-w-4xl mt-6 mb-6">
             <h1 class="text-4xl font-bold mb-4">History for game <%- history._id %></h1>
+            <p class="text-gray-600 mb-4" id="history-username"></p>
             <canvas id="main" class="m-auto align-center justify-center" width="500px" height="500px"></canvas>
             <p class="text-red-500 text-sm mb-4" id="error"></p>
             <div class="flex justify-center mt-4">
@@ -136,6 +137,9 @@ description: "Project a vector, earn points, and beat others!"
 			document.getElementById('score').innerText = Math.round(data.score * 100) / 100 + ' points';
 			document.getElementById('score-x').innerText = Math.round(data.scores[0] * 100) / 100 + ' points';
 			document.getElementById('score-y').innerText = Math.round(data.scores[1] * 100) / 100 + ' points';
+
+			// Write history username from data.user
+            document.getElementById('history-username').innerText = "Played by " + data.user;
 
 			// Stop the game
     			ctx.clearRect(0, 0, canvas.width, canvas.height);
