@@ -14,7 +14,8 @@ description: "Project a vector, earn points, and beat others!"
             <p class="mb-4">
                 Your goal is to project the <span class="font-bold text-red-500">red vector</span> onto the <span
                         class="font-bold text-blue-500">blue vector</span>. Drag the green vector's head (arrow) to
-                where you think the projection will be. If you're on a touch screen device (I do rotating your phone sideways), click on the canvas to place your vector. The closer you are, the more points you get!
+                where you think the projection will be. If you're on a touch screen device (I do rotating your phone
+                sideways), click on the canvas to place your vector. The closer you are, the more points you get!
             </p>
             <p class="mb-4">
                 A score of >90 is pretty good, a score of >95 is excellent, and a score of >98 means you're probably
@@ -45,25 +46,38 @@ description: "Project a vector, earn points, and beat others!"
                 </button>
             </div>
             <p class="text-red-500 text-sm mb-4" id="error"></p>
-            <div class="flex justify-center mt-4">
-                <table class="table-auto border-collapse border border-gray-400">
-                    <tr class="border border-gray-400">
-                        <th class="border border-gray-400 px-4 py-2">Type</th>
-                        <th class="border border-gray-400 px-4 py-2">Score</th>
-                    </tr>
-                    <tr class="border border-gray-400">
-                        <td class="border border-gray-400 px-4 py-2">Total score</td>
-                        <td class="border border-gray-400 px-4 py-2" id="score"></td>
-                    </tr>
-                    <tr class="border border-gray-400">
-                        <td class="border border-gray-400 px-4 py-2">X score</td>
-                        <td class="border border-gray-400 px-4 py-2" id="score-x"></td>
-                    </tr>
-                    <tr class="border border-gray-400">
-                        <td class="border border-gray-400 px-4 py-2">Y score</td>
-                        <td class="border border-gray-400 px-4 py-2" id="score-y"></td>
-                    </tr>
-                </table>
+            <div class="w-full">
+                <div class="bg-gray-200 rounded-full h-4 mb-2">
+                    <div id="general-score-bar" class="bg-blue-500 rounded-full h-4" style="width: 0%">&nbsp;</div>
+                </div>
+                <p class="text-center text-sm text-gray-600">Total Score: <span id="general-score"
+                                                                                class="font-bold">0</span></p>
+            </div>
+            <div class="flex flex-col md:flex-row gap-2">
+
+                <div class="w-1/2">
+                    <div class="bg-gray-200 rounded-full h-4 mb-2">
+                        <div id="cosine-score-bar" class="bg-blue-500 rounded-full h-4" style="width: 0%">&nbsp;</div>
+                    </div>
+                    <p class="text-center text-sm text-gray-600">Cosine Similarity: <span id="cosine-score"
+                                                                                          class="font-bold">0</span></p>
+                </div>
+                <div class="w-1/2">
+                    <div class="bg-gray-200 rounded-full h-4 mb-2">
+                        <div id="euclidean-score-bar" class="bg-blue-500 rounded-full h-4" style="width: 0%">&nbsp;
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-600">Magnitude Score: <span id="euclidean-score"
+                                                                                        class="font-bold">0</span>
+                </div>
+                <div class="w-1/2">
+                    <div class="bg-gray-200 rounded-full h-4 mb-2">
+                        <div id="chebyshev-score-bar" class="bg-blue-500 rounded-full h-4" style="width: 0%">&nbsp;
+                        </div>
+                    </div>
+                    <p class="text-center text-sm text-gray-600">Chebyshev Distance: <span id="chebyshev-score"
+                                                                                           class="font-bold">0</span>
+                </div>
             </div>
         </div>
     </div>
@@ -338,11 +352,11 @@ description: "Project a vector, earn points, and beat others!"
 	canvas.addEventListener('click', (e) => {
 		if (mobile) {
 			// Get current position of canvas on screen (not page)
-            const rect = canvas.getBoundingClientRect();
-            // Get the x and y coordinates of the click relative to the canvas
-            const x = e.clientX - rect.left;
-						            const y = e.clientY - rect.top;
-												console.log("mobile click at " + x + ", " + y);
+			const rect = canvas.getBoundingClientRect();
+			// Get the x and y coordinates of the click relative to the canvas
+			const x = e.clientX - rect.left;
+			const y = e.clientY - rect.top;
+			console.log("mobile click at " + x + ", " + y);
 			if (currentGame) {
 				currentGame.draggableVector.dragging = true;
 				currentGame.draggableVector.x2 = x;
@@ -385,9 +399,15 @@ description: "Project a vector, earn points, and beat others!"
 			document.getElementById('error').innerText = data.message;
 		} else {
 			// Correct: edit HTML with new scores and re-render solution (not with game, though)
-			document.getElementById('score').innerText = Math.round(data.score * 100) / 100 + ' points';
-			document.getElementById('score-x').innerText = Math.round(data.scores[0] * 100) / 100 + ' points';
-			document.getElementById('score-y').innerText = Math.round(data.scores[1] * 100) / 100 + ' points';
+			document.getElementById('general-score').innerText = Math.round(data.score * 100) / 100 + ' points';
+			document.getElementById('cosine-score').innerText = Math.round(data.scores[0] * 100) / 100 + ' points';
+			document.getElementById('euclidean-score').innerText = Math.round(data.scores[1] * 100) / 100 + ' points';
+			document.getElementById('chebyshev-score').innerText = Math.round(data.scores[2] * 100) / 100 + ' points';
+
+			document.getElementById('general-score-bar').style.width = (data.score < 0 ? 0 : data.score) + '%';
+			document.getElementById('cosine-score-bar').style.width = (data.scores[0] < 0 ? 0 : data.scores[0]) + '%';
+			document.getElementById('euclidean-score-bar').style.width = (data.scores[1] < 0 ? 0 : data.scores[1]) + '%';
+			document.getElementById('chebyshev-score-bar').style.width = (data.scores[2] < 0 ? 0 : data.scores[2]) + '%';
 
 			// Stop the game
 			currentGame.stop();

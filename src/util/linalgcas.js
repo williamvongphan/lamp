@@ -160,6 +160,10 @@ class Vector {
 	toJSON() {
 		return this.data;
 	}
+
+	dims() {
+		return this.size;
+	}
 }
 
 class Matrix {

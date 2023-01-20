@@ -31,17 +31,35 @@ module.exports = {
 		// Convert to vectors
 		let submitted = Vector.fromArray(submittedVector);
 		let solved = Vector.fromArray(solvedVector);
-		// Compare each dimension in percent accuracy
 		let scores = [];
-		for (let i = 0; i < submitted.size; i++) {
-			// Use a scale such that if the user is closer to the correct answer, they get a higher score (up to 100%) and if they are farther away, they get a lower score (down to 0%). Use a logarithmic scale to make the difference between 0 and 1 more significant than the difference between 9 and 10.
+		let dot = submitted.dot(solved);
+		let mag1 = submitted.magnitude();
+		let mag2 = solved.magnitude();
+		let cos = dot / (mag1 * mag2);
+		let cosine = (cos + 1) * 50;
+		scores.push(cosine);
+		// Use a magnitude-based score (but not euclidean distance, because that can return negative values)
+		let mag = Math.abs(submitted.magnitude() - solved.magnitude());
+		let magScore = 100 - Math.log10(mag + 1) * (100 / Math.sqrt(2));
+		scores.push(magScore);
+		// Calculate Chebyshev distance
+		let chebyshev = 0;
+		for (let i = 0; i < submitted.dims(); i++) {
 			let diff = Math.abs(submitted.get(i) - solved.get(i));
-			let score = Math.abs(100 - 100 * Math.log10(diff + 1));
-			scores.push(score);
+			if (diff > chebyshev) {
+				chebyshev = diff;
+			}
 		}
-		// Return the average score
+		let chebyshevScore = 100 - Math.log10(chebyshev + 1) * (100 / Math.sqrt(2));
+		scores.push(chebyshevScore);
+		// Calculate the average score
+		let score = 0;
+		for (let i = 0; i < scores.length; i++) {
+			score += scores[i];
+		}
+		score /= scores.length;
 		return {
-			score: scores.reduce((a, b) => a + b, 0) / scores.length,
+			score: score,
 			scores: scores
 		};
 	}
