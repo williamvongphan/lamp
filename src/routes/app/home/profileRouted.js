@@ -8,7 +8,8 @@ let route = {
 		let user = await UserSchema.findOne({ username: req.params.username })
 		if (user && !user.privateProfile) {
 			res.render('profile', {
-				"username": req.params.username
+				"username": req.params.username,
+				"privacy": true,
 			});
 		} else {
 			res.render('profile404', {
