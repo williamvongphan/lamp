@@ -9,7 +9,7 @@ let route = {
 		if (user && !user.privateProfile) {
 			res.render('profile', {
 				"username": req.params.username,
-				"privacy": true,
+				"privacy": false,
 			});
 		} else {
 			res.render('profile404', {
