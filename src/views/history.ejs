@@ -1,8 +1,8 @@
 <html>
 <!-- Include head, pass meta object through -->
 <%- include('partials/head', { meta: {
-title: "Play",
-description: "Project a vector, earn points, and beat others!"
+title: "History",
+description: "History page for arbitrary game",
 } }) %>
 <body class="bg-gray-100">
 <div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
@@ -87,6 +87,7 @@ description: "Project a vector, earn points, and beat others!"
         </div>
     </div>
 </div>
+<%- include('partials/cookies') %>
 
 <script>
 	let historyId = "<%= history._id %>";

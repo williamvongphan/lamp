@@ -7,6 +7,7 @@ let user = new mongoose.Schema({
 	passwordHash: String,
 	passwordSalt: String,
 	bio: String,
+	privateProfile: Boolean,
 });
 
 module.exports = mongoose.model("User", user)

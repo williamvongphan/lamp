@@ -46,7 +46,6 @@ passport.use(new LocalStrategy(
 		passwordField: 'password'
 	},
 	async (username, password, done) => {
-		console.log('Authenticating user...');
 		let user = await User.findOne({ username: username });
 		if (!user) {
 			return done(null, false, { message: 'Incorrect username or password.' });

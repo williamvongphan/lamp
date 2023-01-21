@@ -52,6 +52,12 @@ module.exports = {
 		}
 		let chebyshevScore = 100 - Math.log10(chebyshev + 1) * (100 / Math.sqrt(2));
 		scores.push(chebyshevScore);
+		// If any score is null, NaN, or Infinity, replace it with 0
+		for (let i = 0; i < scores.length; i++) {
+			if (scores[i] === null || isNaN(scores[i]) || !isFinite(scores[i])) {
+				scores[i] = 0;
+			}
+		}
 		// Calculate the average score
 		let score = 0;
 		for (let i = 0; i < scores.length; i++) {

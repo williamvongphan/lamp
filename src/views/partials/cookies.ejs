@@ -1,0 +1,39 @@
+<!-- Little cookies banner at the bottom of the page. Script checks if cookies have been accepted and hides the banner if so. -->
+<!-- Use TailwindCSS to style the banner. Make sure it's fixed and on top of every other element.-->
+<div class="fixed bottom-0 left-0 w-full bg-gray-900 text-white text-center text-sm py-2 z-50" id="cookies-banner">
+    <div class="container mx-auto px-4">
+        <div class="flex flex-wrap items-center justify-between">
+            <div class="w-full md:w-2/3">
+                <p class="mb-2 md:mb-0">
+                    🍪 Please accept cookies to continue using this website. We don't use cookies to track you or collect any personal information. <a href="/cookies" class="underline">Learn more</a>.
+                </p>
+            </div>
+            <div class="w-full md:w-1/3">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" id="accept-cookies">
+                    Accept cookies
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- At the bottom of the page, display centered tiny links to terms and privacy policy. -->
+<div class="container mx-auto px-4 py-8 max-w-24">
+    <div class="flex flex-wrap items-center justify-center">
+        <a href="/terms" class="text-xs text-gray-600 hover:text-gray-800 mr-4">Terms</a>
+        <a href="/privacy" class="text-xs text-gray-600 hover:text-gray-800">Privacy</a>
+    </div>
+</div>
+
+<script>
+    // Check if cookies have been accepted
+    if (document.cookie.indexOf('cookies-accepted') >= 0) {
+        document.getElementById('cookies-banner').style.display = 'none';
+    }
+
+    // Accept cookies
+    document.getElementById('accept-cookies').addEventListener('click', function() {
+        document.cookie = 'cookies-accepted=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/';
+        document.getElementById('cookies-banner').style.display = 'none';
+    });
+</script>

@@ -6,7 +6,7 @@ let route = {
 	"method": "get",
 	"handler": async function (req, res) {
 		let user = await UserSchema.findOne({ username: req.params.username })
-		if (user) {
+		if (user && !user.privateProfile) {
 			res.render('profile', {
 				"username": req.params.username
 			});

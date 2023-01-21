@@ -1,0 +1,38 @@
+<html>
+<!-- Include head, pass meta object through -->
+<%- include('partials/head', { meta: {
+title: "Cookies",
+description: "Why we use cookies and how you can control them.",
+} }) %>
+<body class="bg-gray-100">
+<div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
+<div class="relative z-10">
+    <div class="container mx-auto min-h-screen flex flex-col items-center justify-center">
+        <div class="p-6 rounded-lg shadow-md bg-white max-w-4xl mt-6 mb-6">
+            <h1 class="text-4xl font-bold text-gray-800">Cookie Policy</h1>
+            <p class="text-gray-600 mt-4">
+                We use cookies to ensure that we give you the best experience on our website.
+                If you continue to use this site we will assume that you are happy with it.
+            </p>
+            <h2 class="text-2xl font-bold text-gray-800 mt-8">What are cookies?</h2>
+            <p class="text-gray-600 mt-4">
+                Cookies are small text files that are placed on your computer or mobile phone when you browse websites.
+            </p>
+            <h2 class="text-2xl font-bold text-gray-800 mt-8">How are cookies normally used?</h2>
+            <p class="text-gray-600 mt-4">
+                Cookies are used to improve the functionality of a website, to help the website owner understand how the website is being used, and to provide more relevant advertising.
+            </p>
+            <h2 class="text-2xl font-bold text-gray-800 mt-8">How do we use cookies?</h2>
+            <p class="text-gray-600 mt-4">
+                We only use cookies to <span class="font-bold">facilitate one-time consent</span> to cookie use, and <span class="font-bold">store login information</span> for the duration of the session. Under no circumstances do we use cookies to track your browsing history or to collect any personal information.
+            </p>
+            <h2 class="text-2xl font-bold text-gray-800 mt-8">How to control cookies</h2>
+            <p class="text-gray-600 mt-4">
+                You can control and/or delete cookies as you wish – for details, see <a href="https://www.aboutcookies.org" class="text-blue-500 hover:underline">aboutcookies.org</a>. You can delete all cookies that are already on your computer and you can set most browsers to prevent them from being placed. If you do this, however, you may have to manually adjust some preferences every time you visit a site and some services and functionalities may not work.
+            </p>
+        </div>
+    </div>
+</div>
+<%- include('partials/cookies') %>
+</body>
+</html>

@@ -16,9 +16,7 @@ module.exports = {
 		return { hash: hash, salt: salt };
 	},
 	compare: function (password, hash) {
-		console.log(password, hash);
 		let res = bcrypt.compareSync(password, hash);
-		console.log(res);
 		return res;
 	}
 }

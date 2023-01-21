@@ -11,7 +11,7 @@ description: "Profile and information about this user",
     <div class="container mx-auto flex flex-col items-center justify-center">
         <div class="container mx-auto flex items-center justify-center max-w-4xl mt-6 mb-6">
             <div class="bg-white p-6 rounded-lg shadow-md">
-                <h1 class="text-3xl font-bold">Profile for <%= username %></h1>
+                <h1 class="text-3xl font-bold">Profile for <%= username %> <span class="text-gray-500 text-sm"><%= privacy ? "Private" : "Public" %> profile</span></h1>
                 <p class="text-red-500 text-sm mb-4" id="error"></p>
                 <p class="text-gray-600 text-lg" id="bio"></p>
                 <p class="" id="avg-score"></p>
@@ -36,6 +36,7 @@ description: "Profile and information about this user",
         </div>
     </div>
 </div>
+<%- include('partials/cookies') %>
 
 <!-- Submit to /api/login, do not change pages (until we receive a response) -->
 <script>

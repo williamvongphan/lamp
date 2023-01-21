@@ -44,8 +44,10 @@ description: "Login to your account",
         </form>
     </div>
 </div>
+    <%- include('partials/cookies') %>
 
-<!-- Submit to /api/login, do not change pages (until we receive a response) -->
+
+    <!-- Submit to /api/login, do not change pages (until we receive a response) -->
 <script>
     document.getElementById("login-form").addEventListener("submit", async function(e) {
         e.preventDefault();

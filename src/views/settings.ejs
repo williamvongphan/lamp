@@ -8,9 +8,8 @@ description: "Login to your account",
 <body class="bg-gray-100">
 <div class="absolute inset-0 bg-[url(/svg/grid.svg)] bg-center w-full h-full -z-10"></div>
 <div class="relative z-10">
-    <div class="container mx-auto h-screen flex flex-col items-center justify-center">
-        <div class="container mx-auto flex items-center justify-center h-screen">
-            <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="container mx-auto min-h-screen flex flex-col items-center justify-center">
+        <div class="p-6 rounded-lg shadow-md bg-white max-w-4xl mt-6 mb-6">
                 <form class="p-6" id="bio-form">
                     <p class="text-3xl font-bold mb-4">Settings</p>
                     <div class="mb-4">
@@ -30,6 +29,30 @@ description: "Login to your account",
                             class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                     >
                         Change Bio
+                    </button>
+                </form>
+
+                <form id="privacy-form" class="p-6">
+                    <!-- Choose whether to make my profile public or private -->
+                    <div class="mb-4">
+                        <label class="block text-gray-700 font-medium mb-2" for="username">
+                            Leaderboard
+                        </label>
+                        <select
+                                id="privacy"
+                                class="w-full border border-gray-400 p-2 rounded-lg hover:border-sky-blue focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        >
+                            <option value="public">Public</option>
+                            <option value="private">Private</option>
+                        </select>
+                    </div>
+
+                    <p class="text-red-500 text-sm mb-4" id="error-privacy"></p>
+                    <button
+                            type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    >
+                        Change Leaderboard Privacy
                     </button>
                 </form>
 
@@ -76,10 +99,42 @@ description: "Login to your account",
                         Change password
                     </button>
                 </form>
+                <!-- Export data -->
+                <form id="export-form" class="p-6">
+                    <p class="text-3xl font-bold mb-4">Export data</p>
+                    <p class="text-gray-700 mb-4">Export your data to a JSON file.</p>
+                    <span class="text-red-500 text-sm mb-4" id="error-export"></span>
+                    <button
+                            type="submit"
+                            class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                    >
+                        Export data
+                    </button>
+                </form>
+
+                <!-- Delete account -->
+                <form id="delete-form" class="p-6">
+                    <p class="text-3xl font-bold mb-4">Delete account</p>
+                    <p class="text-gray-700 mb-4">Delete your account and all your data.</p>
+                    <input
+                            id="delete-password"
+                            type="password"
+                            class="w-full border border-gray-400 p-2 rounded-lg hover:border-sky-blue focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                            placeholder="********"
+                    >
+                    <span class="text-red-500 text-sm mb-4" id="error-delete"></span>
+                    <button
+                            type="submit"
+                            class="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+                    >
+                        Delete account
+                    </button>
+                </form>
             </div>
         </div>
     </div>
 </div>
+<%- include('partials/cookies') %>
 
 <!-- Submit to /api/login, do not change pages (until we receive a response) -->
 <script>
@@ -125,31 +180,97 @@ description: "Login to your account",
 				}
 			});
 	});
-	
-	document.getElementById("password-form").addEventListener("submit", function (e) {
+
+	// Privacy settings
+    document.getElementById("privacy-form").addEventListener("submit", function (e) {
         e.preventDefault();
-        let currentPassword = document.getElementById("current-password").value;
-        let newPassword = document.getElementById("new-password").value;
-        let confirmNewPassword = document.getElementById("confirm-new-password").value;
-        if (newPassword !== confirmNewPassword) {
-          document.getElementById("error-passwords").innerHTML = "Passwords do not match";
-        }
-        fetch("/api/settings/password", {
+        let privacy = document.getElementById("privacy").value;
+        fetch("/api/settings/privacy", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                oldPassword: currentPassword,
-                newPassword: newPassword,
+                privateProfile: privacy === "private",
             }),
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.error) {
-                    document.getElementById("error-passwords").innerHTML = data.error;
+                    document.getElementById("error-privacy").innerHTML = data.error;
                 } else {
-                    window.location.href = "/profile";
+                    window.location.href = "/";
+                }
+            });
+    });
+
+	document.getElementById("password-form").addEventListener("submit", function (e) {
+		e.preventDefault();
+		let currentPassword = document.getElementById("current-password").value;
+		let newPassword = document.getElementById("new-password").value;
+		let confirmNewPassword = document.getElementById("confirm-new-password").value;
+		if (newPassword !== confirmNewPassword) {
+			document.getElementById("error-passwords").innerHTML = "Passwords do not match";
+		}
+		fetch("/api/settings/password", {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({
+				oldPassword: currentPassword,
+				newPassword: newPassword,
+			}),
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.error) {
+					document.getElementById("error-passwords").innerHTML = data.error;
+				} else {
+					window.location.href = "/profile";
+				}
+			});
+	});
+
+	// Data export
+	document.getElementById("export-form").addEventListener("submit", function (e) {
+		e.preventDefault();
+		fetch("/api/data", {
+			method: "get"
+		})
+			.then((res) => res.json())
+			.then((data) => {
+				if (data.status !== 200) {
+					document.getElementById("error-export").innerHTML = data.error;
+				} else {
+					// Create a link to the file and click it
+					let a = document.createElement("a");
+					a.href = URL.createObjectURL(new Blob([JSON.stringify(data.data)]));
+					a.download = "data.json";
+					a.click();
+				}
+			});
+	});
+
+	// When the delete button is clicked, check if the password is correct
+    document.getElementById("delete-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        let password = document.getElementById("delete-password").value;
+        fetch("/api/delete", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                password: password,
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data.error) {
+                    document.getElementById("error-delete").innerHTML = data.message;
+                } else {
+                    window.location.href = "/logout";
                 }
             });
     });
